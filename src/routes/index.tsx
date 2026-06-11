@@ -684,7 +684,7 @@ function Home() {
                 href="#contato"
                 className="inline-flex items-center gap-2 bg-navy-deep text-white hover:bg-navy transition-all duration-300 px-6 py-3.5 rounded-full text-sm font-semibold"
               >
-                Conhecer a equipe <ArrowUpRight className="h-4 w-4" />
+                Fale conosco <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
           </div>
