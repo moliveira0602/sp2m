@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, X, Send, ArrowRight, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import cfoAvatar from '@/assets/cfo-avatar.png';
+import cfoAvatar from '@/assets/cfo-avatar.webp';
 
 interface Message {
   sender: 'bot' | 'user';

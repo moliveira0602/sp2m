@@ -11,10 +11,10 @@ if (typeof window !== "undefined") {
 }
 import logoForDark from "@/assets/logo-dark.png";
 import logoForLight from "@/assets/logo-light.png";
-import t1Img from "@/assets/testimonial-1.png";
-import t2Img from "@/assets/testimonial-2.png";
-import t3Img from "@/assets/testimonial-3.png";
-import techBiImg from "@/assets/tech-bi.jpg";
+import t1Img from "@/assets/testimonial-1.webp";
+import t2Img from "@/assets/testimonial-2.webp";
+import t3Img from "@/assets/testimonial-3.webp";
+import techBiImg from "@/assets/tech-bi.webp";
 import {
   ArrowRight,
   BarChart3,
