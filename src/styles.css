@@ -1,0 +1,366 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-950: var(--navy-950);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Brand palette — refinada */
+  --navy-950: oklch(0.11 0.03 256);
+  --navy-deep: oklch(0.16 0.04 256);
+  --navy: oklch(0.23 0.06 258);
+  --gold: oklch(0.74 0.13 75);      /* Dourado mais rico, menos amarelo */
+  --gold-soft: oklch(0.82 0.09 78);
+  --gold-light: oklch(0.90 0.06 82);
+
+  --background: oklch(0.985 0.002 255); /* Off-white, não branco puro */
+  --foreground: oklch(0.16 0.04 256);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0.04 256);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0.04 256);
+  --primary: oklch(0.16 0.04 256);
+  --primary-foreground: oklch(0.985 0.003 250);
+  --secondary: oklch(0.97 0.005 250);
+  --secondary-foreground: oklch(0.16 0.04 256);
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.45 0.02 256);
+  --accent: oklch(0.74 0.13 75);
+  --accent-foreground: oklch(0.16 0.04 256);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.91 0.008 256);
+  --input: oklch(0.91 0.008 256);
+  --ring: oklch(0.74 0.13 75);
+
+  /* Gradients */
+  --gradient-navy: linear-gradient(135deg, oklch(0.11 0.03 256), oklch(0.23 0.06 258));
+  --gradient-gold: linear-gradient(135deg, oklch(0.74 0.13 75), oklch(0.90 0.06 82));
+
+  /* Shadow system — profundidade progressiva */
+  --shadow-xs:      0 1px 2px oklch(0.11 0.03 256 / 0.04);
+  --shadow-sm:      0 2px 8px oklch(0.11 0.03 256 / 0.06);
+  --shadow-md:      0 8px 24px -4px oklch(0.11 0.03 256 / 0.10);
+  --shadow-lg:      0 16px 48px -8px oklch(0.11 0.03 256 / 0.16);
+  --shadow-xl:      0 32px 80px -16px oklch(0.11 0.03 256 / 0.22);
+  --shadow-premium: 0 40px 100px -20px oklch(0.11 0.03 256 / 0.30);
+  --shadow-soft:    0 10px 40px -20px oklch(0.11 0.03 256 / 0.12);
+
+  /* Gold glow — uso em fundo escuro */
+  --glow-gold-sm: 0 0 20px oklch(0.74 0.13 75 / 0.25);
+  --glow-gold-md: 0 0 40px oklch(0.74 0.13 75 / 0.30);
+  --glow-gold-lg: 0 0 80px oklch(0.74 0.13 75 / 0.20);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* ─── COMPONENT LAYER ───────────────────────────────────────────── */
+@layer components {
+
+  /* Glassmorphism — navbar e cards em fundo escuro */
+  .glass {
+    background: oklch(1 0 0 / 0.05);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid oklch(1 0 0 / 0.10);
+  }
+
+  /* Navbar ao scroll */
+  .nav-scrolled {
+    background: oklch(0.985 0.002 255 / 0.90);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid oklch(0 0 0 / 0.05);
+    box-shadow: 0 4px 30px oklch(0.16 0.04 256 / 0.05);
+  }
+
+  /* Scroll reveal — estado inicial (Materialização de Jakub com Blur e TranslateY) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(4px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+
+  /* Micro-interações táteis nos botões e links (Emil press scale) */
+  button:active,
+  a[href^="#"]:active,
+  a[href^="https://wa.me"]:active,
+  a[href^="mailto:"]:active,
+  .btn-active-press:active {
+    transform: scale(0.97) !important;
+    transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Micro-interações de destaque nos painéis (Jhey/Jakub) */
+  .mini-metric {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s;
+    will-change: transform;
+  }
+  .mini-metric:hover {
+    transform: translateY(-2px) scale(1.02);
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Reveal com delays */
+  .reveal-delay-1 { transition-delay: 100ms; }
+  .reveal-delay-2 { transition-delay: 200ms; }
+  .reveal-delay-3 { transition-delay: 300ms; }
+  .reveal-delay-4 { transition-delay: 400ms; }
+  .reveal-delay-5 { transition-delay: 500ms; }
+  .reveal-delay-6 { transition-delay: 600ms; }
+
+  /* Nav link com underline animado */
+  .nav-link {
+    position: relative;
+    color: var(--color-navy-deep);
+    opacity: 0.8;
+    transition: color 300ms, opacity 300ms;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-link:hover { color: var(--color-navy-deep); opacity: 1; }
+  .nav-link:hover::after { width: 100%; }
+
+  /* Hero grid background pattern */
+  .hero-grid {
+    background-image:
+      linear-gradient(oklch(0 0 0 / 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(0 0 0 / 0.02) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Contact form input */
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: oklch(1 0 0 / 0.06);
+    border: 1px solid oklch(1 0 0 / 0.12);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: white;
+    transition: border-color 200ms, box-shadow 200ms;
+    font-family: var(--font-sans);
+  }
+  .form-input::placeholder { color: oklch(1 0 0 / 0.60); }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px oklch(0.74 0.13 75 / 0.15);
+  }
+
+  /* Select styling */
+  .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: oklch(1 0 0 / 0.06);
+    border: 1px solid oklch(1 0 0 / 0.12);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: white;
+    transition: border-color 200ms;
+    font-family: var(--font-sans);
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+  .form-select option { background: oklch(0.16 0.04 256); color: white; }
+  .form-select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px oklch(0.74 0.13 75 / 0.15);
+  }
+}
+
+/* ─── UTILITIES ─────────────────────────────────────────────────── */
+
+@utility container-px {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  @media (min-width: 768px) {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  @media (min-width: 1280px) {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+
+
+@utility hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* ─── KEYFRAMES ─────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 20px oklch(0.74 0.13 75 / 0.15); }
+  50%       { box-shadow: 0 0 40px oklch(0.74 0.13 75 / 0.35); }
+}
+
+@keyframes expand-line {
+  from { width: 0; }
+  to   { width: 40px; }
+}
+
+@keyframes bounce-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── ANIMATION UTILITIES ───────────────────────────────────────── */
+
+@utility animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 1s ease both;
+}
+
+@utility animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@utility animate-pulse-gold {
+  animation: pulse-gold 3s ease-in-out infinite;
+}
+
+@utility animate-bounce-y {
+  animation: bounce-y 1.8s ease-in-out infinite;
+}
+
+@utility animate-line {
+  animation: expand-line 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+@utility animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility animate-delay-400 {
+  animation-delay: 400ms;
+}
+
+@utility animate-delay-600 {
+  animation-delay: 600ms;
+}
+
+@utility animate-delay-800 {
+  animation-delay: 800ms;
+}
+
+/* Suporte à acessibilidade e preferências de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
