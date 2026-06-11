@@ -45,21 +45,32 @@ import {
 
 export const Route = createFileRoute("/")({
   head: () => ({
+    title: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa",
     meta: [
-      { title: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa" },
       {
         name: "description",
         content:
           "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI). Transformamos suas finanças em uma vantagem competitiva real e sustentável.",
       },
-      { property: "og:title", content: "SP2M Inteligência Empresarial" },
+      {
+        name: "keywords",
+        content:
+          "BPO Financeiro, Assessoria Financeira, CFO sob Demanda, Diretoria Financeira, Inteligência de Negócios, Business Intelligence, BI, Planejamento Financeiro, Gestão de Caixa, Gestão Financeira PMEs, SP2M, Recife finanças",
+      },
+      { property: "og:title", content: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa" },
       {
         property: "og:description",
         content:
           "O parceiro financeiro estratégico que transforma números em decisões. BPO Financeiro, Assessoria Estratégica e Diretoria Financeira (CFO) sob Demanda para empresas que recusam crescer no improviso.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://sp2m.com.br/" },
+      { name: "twitter:title", content: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa" },
+      {
+        name: "twitter:description",
+        content:
+          "BPO Financeiro, Assessoria Estratégica e CFO sob Demanda para empresas que recusam crescer no improviso.",
+      },
     ],
     links: [
       { rel: "canonical", href: "/" },
@@ -560,6 +571,32 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FinancialService",
+            "name": "SP2M Inteligência Empresarial",
+            "url": "https://sp2m.com.br",
+            "logo": "https://sp2m.com.br/assets/logo-dark.png",
+            "description": "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI) para PMEs.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Recife",
+              "addressRegion": "PE",
+              "addressCountry": "BR"
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+55-81-99278-1366",
+              "contactType": "sales",
+              "areaServed": "BR",
+              "availableLanguage": "Portuguese"
+            }
+          })
+        }}
+      />
       <Navbar />
 
       {/* ── HERO ──────────────────────────────────────────────────────── */}
