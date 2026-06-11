@@ -1139,7 +1139,7 @@ function Home() {
                   </div>
                 </a>
                 <a
-                  href="mailto:seidel@katusolucoes.com.br"
+                  href="mailto:contato@sp2m.com.br"
                   className="flex items-center gap-3.5 text-white/85 hover:text-gold transition-colors group"
                 >
                   <div className="flex items-center justify-center h-10 w-10 rounded-xl border border-white/10 group-hover:border-gold/40 transition-colors">
@@ -1147,7 +1147,7 @@ function Home() {
                   </div>
                   <div>
                     <div className="text-xs uppercase tracking-wider text-white/60 mb-0.5">Email</div>
-                    <span className="text-sm">seidel@katusolucoes.com.br</span>
+                    <span className="text-sm">contato@sp2m.com.br</span>
                   </div>
                 </a>
                 <a
@@ -1226,10 +1226,10 @@ function Home() {
               </li>
               <li>
                 <a
-                  href="mailto:seidel@katusolucoes.com.br"
+                  href="mailto:contato@sp2m.com.br"
                   className="flex items-center gap-2.5 hover:text-gold transition-colors text-navy-deep/80"
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-navy-deep/40" /> seidel@katusolucoes.com.br
+                  <Mail className="h-4 w-4 shrink-0 text-navy-deep/40" /> contato@sp2m.com.br
                 </a>
               </li>
               <li>
