@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, type FormEvent } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { YieldCard } from "@/components/ui/yield-card";
@@ -350,37 +350,43 @@ function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu (Transição rápida e fluida de Emil/Jakub) */}
-      <div
-        className={`md:hidden border-t border-border overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-        style={{ background: "oklch(0.985 0.002 255 / 0.97)", backdropFilter: "blur(20px)" }}
-      >
-        <div className="container-px py-6 flex flex-col gap-5">
-          {navLinks.map(([href, label]) => (
-            <a
-              key={href}
-              href={href}
-              onClick={() => setIsOpen(false)}
-              className="text-navy-deep/80 hover:text-gold transition-colors text-sm font-medium"
-            >
-              {label}
-            </a>
-          ))}
-          <a
-            href="#contato"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              window.dispatchEvent(new CustomEvent("open-chatbot"));
-            }}
-            className="inline-flex items-center gap-2 bg-gold text-navy-deep px-5 py-3 rounded-full font-semibold w-fit text-sm mt-2"
+      {/* Mobile menu (Transição rápida e fluida com Framer Motion) */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden border-t border-border overflow-hidden"
+            style={{ background: "oklch(0.985 0.002 255 / 0.97)", backdropFilter: "blur(20px)" }}
           >
-            Diagnóstico gratuito <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
+            <div className="container-px py-6 flex flex-col gap-5">
+              {navLinks.map(([href, label]) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setIsOpen(false)}
+                  className="text-navy-deep/80 hover:text-gold transition-colors text-sm font-medium"
+                >
+                  {label}
+                </a>
+              ))}
+              <a
+                href="#contato"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                  window.dispatchEvent(new CustomEvent("open-chatbot"));
+                }}
+                className="inline-flex items-center gap-2 bg-gold text-navy-deep px-5 py-3 rounded-full font-semibold w-fit text-sm mt-2"
+              >
+                Diagnóstico gratuito <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
