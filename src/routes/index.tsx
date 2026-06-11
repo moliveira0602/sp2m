@@ -45,31 +45,31 @@ import {
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    title: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa",
+    title: "SP2M Inteligência Empresarial — BPO Financeiro e CFO em Recife e Caruaru",
     meta: [
       {
         name: "description",
         content:
-          "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI). Transformamos suas finanças em uma vantagem competitiva real e sustentável.",
+          "BPO Financeiro, Assessoria Estratégica e CFO sob Demanda em Recife, Caruaru e região de Pernambuco. Transforme a gestão financeira da sua PME com Business Intelligence (BI).",
       },
       {
         name: "keywords",
         content:
-          "BPO Financeiro, Assessoria Financeira, CFO sob Demanda, Diretoria Financeira, Inteligência de Negócios, Business Intelligence, BI, Planejamento Financeiro, Gestão de Caixa, Gestão Financeira PMEs, SP2M, Recife finanças",
+          "BPO Financeiro Recife, BPO Financeiro Caruaru, BPO Financeiro Pernambuco, CFO sob Demanda Recife, CFO sob Demanda Caruaru, Consultoria Financeira Recife, Consultoria Financeira Caruaru, Terceirização Financeira Recife, Terceirização Financeira Caruaru, Gestão Financeira PMEs PE, BI Financeiro Recife, Inteligência Empresarial Pernambuco, SP2M, finanças Caruaru, finanças Recife",
       },
-      { property: "og:title", content: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa" },
+      { property: "og:title", content: "SP2M Inteligência Empresarial — BPO Financeiro e CFO em Recife e Caruaru" },
       {
         property: "og:description",
         content:
-          "O parceiro financeiro estratégico que transforma números em decisões. BPO Financeiro, Assessoria Estratégica e Diretoria Financeira (CFO) sob Demanda para empresas que recusam crescer no improviso.",
+          "O parceiro financeiro estratégico de PMEs em Recife, Caruaru e região. BPO Financeiro, Assessoria Estratégica e CFO sob Demanda para crescer com previsibilidade.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://sp2m.com.br/" },
-      { name: "twitter:title", content: "SP2M Inteligência Empresarial — O CFO Estratégico da Sua Empresa" },
+      { name: "twitter:title", content: "SP2M Inteligência Empresarial — BPO Financeiro e CFO em Recife e Caruaru" },
       {
         name: "twitter:description",
         content:
-          "BPO Financeiro, Assessoria Estratégica e CFO sob Demanda para empresas que recusam crescer no improviso.",
+          "BPO Financeiro, Assessoria Estratégica e CFO sob Demanda em Recife, Caruaru e região para PMEs.",
       },
     ],
     links: [
@@ -580,7 +580,7 @@ function Home() {
             "name": "SP2M Inteligência Empresarial",
             "url": "https://sp2m.com.br",
             "logo": "https://sp2m.com.br/assets/logo-dark.png",
-            "description": "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI) para PMEs.",
+            "description": "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI) em Recife, Caruaru e região.",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Recife",
@@ -591,7 +591,7 @@ function Home() {
               "@type": "ContactPoint",
               "telephone": "+55-81-99278-1366",
               "contactType": "sales",
-              "areaServed": "BR",
+              "areaServed": ["BR", "PE", "Recife", "Caruaru"],
               "availableLanguage": "Portuguese"
             }
           })
@@ -729,7 +729,7 @@ function Home() {
             <p className="text-lg leading-relaxed text-foreground/80 max-w-[70ch]">
               A gestão financeira deixou de ser apenas uma obrigação operacional. Hoje ela é uma das
               principais ferramentas para geração de valor, crescimento e perpetuidade dos negócios.
-              A SP2M nasceu para apoiar empresas que desejam crescer com organização, previsibilidade e inteligência.
+              A SP2M nasceu para apoiar empresas em **Recife**, **Caruaru** e região que desejam crescer com organização, previsibilidade e inteligência.
             </p>
             <p className="text-base leading-relaxed text-foreground/65 max-w-[70ch]">
               Somos especializados em{" "}
@@ -1202,7 +1202,7 @@ function Home() {
               Inteligência financeira para decisões extraordinárias. Gestão financeira de alta performance.
             </p>
             <p className="mt-2 text-xs text-navy-deep/40">
-              Caruaru - PE, 2026
+              Recife & Caruaru - PE, 2026
             </p>
           </div>
           <div>
