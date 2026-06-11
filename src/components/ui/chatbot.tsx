@@ -164,7 +164,7 @@ export function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 flex flex-col items-end">
       
       {/* Chat Window Panel */}
       <AnimatePresence>
@@ -174,7 +174,7 @@ export function Chatbot() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 24 }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="w-[360px] sm:w-[400px] h-[550px] mb-4 rounded-2xl overflow-hidden border border-white/10 bg-[#030d1e]/95 backdrop-blur-xl shadow-2xl flex flex-col"
+            className="w-full max-w-[360px] sm:max-w-[400px] h-[500px] sm:h-[550px] mb-4 rounded-2xl overflow-hidden border border-white/10 bg-[#030d1e]/95 backdrop-blur-xl shadow-2xl flex flex-col"
           >
           
           {/* Header */}
