@@ -726,7 +726,7 @@ const itemVariants = {
 };
 
 function Home() {
-  useReveal();
+  // useReveal();
 
   return (
     <div className="min-h-screen bg-background">

@@ -131,8 +131,8 @@
 
   /* Scroll reveal — estado inicial */
   .reveal {
-    opacity: 0;
-    transform: translateY(16px);
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .reveal.revealed {
