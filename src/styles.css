@@ -350,6 +350,15 @@
   animation-delay: 800ms;
 }
 
+@keyframes preloader-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@utility animate-preloader-bar {
+  animation: preloader-bar 1.5s ease-in-out infinite;
+}
+
 /* Suporte à acessibilidade e preferências de movimento reduzido */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

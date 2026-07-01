@@ -715,10 +715,12 @@ function Home() {
   useReveal();
 
   const [isPreloading, setIsPreloading] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
     const handleLoad = () => {
-      setTimeout(() => setIsPreloading(false), 800);
+      setFadeOut(true);
+      setTimeout(() => setIsPreloading(false), 600);
     };
 
     if (document.readyState === "complete") {
@@ -736,38 +738,21 @@ function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Preloader */}
-      <AnimatePresence>
-        {isPreloading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="fixed inset-0 z-[9999] bg-[#fcfcfc] flex flex-col items-center justify-center gap-6"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="flex flex-col items-center gap-6"
-            >
-              <Logo variant="dark" className="h-20" />
-              
-              <div className="w-40 h-[3px] bg-navy-deep/10 rounded-full overflow-hidden relative">
-                <motion.div
-                  initial={{ left: "-100%" }}
-                  animate={{ left: "100%" }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 1.5,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute top-0 bottom-0 w-1/2 bg-gold rounded-full"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isPreloading && (
+        <div
+          className={`fixed inset-0 z-[9999] bg-[#fcfcfc] flex flex-col items-center justify-center gap-6 transition-all duration-500 ease-in-out ${
+            fadeOut ? "opacity-0 pointer-events-none scale-[1.02]" : "opacity-100"
+          }`}
+        >
+          <div className="flex flex-col items-center gap-6">
+            <Logo variant="dark" className="h-20" />
+            
+            <div className="w-40 h-[3px] bg-navy-deep/10 rounded-full overflow-hidden relative">
+              <div className="absolute top-0 bottom-0 w-1/2 bg-gold rounded-full animate-preloader-bar" />
+            </div>
+          </div>
+        </div>
+      )}
 
       <script
         type="application/ld+json"
