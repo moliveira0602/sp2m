@@ -512,30 +512,25 @@ function SectionTitle({
 }
 
 function ContactForm() {
-  const [form, setForm] = useState({
-    nome: "",
-    empresa: "",
-    faturamento: "",
-    desafio: "",
-    email: "",
-    whatsapp: "",
-  });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      nome: (formData.get("nome") as string) || "",
+      empresa: (formData.get("empresa") as string) || "",
+      email: (formData.get("email") as string) || "",
+      whatsapp: (formData.get("whatsapp") as string) || "",
+      faturamento: (formData.get("faturamento") as string) || "",
+      desafio: (formData.get("desafio") as string) || "",
+    };
+
     try {
-      await sendDiagnostic({ data: form });
+      await sendDiagnostic({ data });
       setStatus("success");
-      setForm({
-        nome: "",
-        empresa: "",
-        faturamento: "",
-        desafio: "",
-        email: "",
-        whatsapp: "",
-      });
       // Return to idle state after 8 seconds
       setTimeout(() => setStatus("idle"), 8000);
     } catch (err) {
@@ -547,7 +542,7 @@ function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="text-center py-8 space-y-4">
+      <div className="text-center py-8 space-y-4 animate-fade-in">
         <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-emerald-500/10 text-emerald-500 mb-2">
           <CheckCircle2 className="h-8 w-8 animate-bounce" />
         </div>
@@ -568,10 +563,9 @@ function ContactForm() {
           </label>
           <input
             type="text"
+            name="nome"
             required
             placeholder="Nome completo"
-            value={form.nome}
-            onChange={(e) => setForm({ ...form, nome: e.target.value })}
             className="form-input"
           />
         </div>
@@ -581,10 +575,9 @@ function ContactForm() {
           </label>
           <input
             type="text"
+            name="empresa"
             required
             placeholder="Nome da empresa"
-            value={form.empresa}
-            onChange={(e) => setForm({ ...form, empresa: e.target.value })}
             className="form-input"
           />
         </div>
@@ -597,10 +590,9 @@ function ContactForm() {
           </label>
           <input
             type="email"
+            name="email"
             required
             placeholder="email@empresa.com"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
             className="form-input"
           />
         </div>
@@ -610,10 +602,9 @@ function ContactForm() {
           </label>
           <input
             type="tel"
+            name="whatsapp"
             required
             placeholder="Ex: (81) 99999-9999"
-            value={form.whatsapp}
-            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
             className="form-input"
           />
         </div>
@@ -624,9 +615,9 @@ function ContactForm() {
           Faturamento mensal aproximado
         </label>
         <select
+          name="faturamento"
           required
-          value={form.faturamento}
-          onChange={(e) => setForm({ ...form, faturamento: e.target.value })}
+          defaultValue=""
           className="form-select"
         >
           <option value="" disabled>
@@ -645,9 +636,8 @@ function ContactForm() {
         </label>
         <input
           type="text"
+          name="desafio"
           placeholder="Ex: fluxo de caixa, falta de dados, crescimento desorganizado..."
-          value={form.desafio}
-          onChange={(e) => setForm({ ...form, desafio: e.target.value })}
           className="form-input"
         />
       </div>
