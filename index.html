@@ -19,6 +19,51 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,300;9..144,1,400&family=Inter:wght@300;400;500;600;700&display=swap" />
   </head>
   <body>
+    <!-- Preloader Nativo (Evita travamentos e overlays no React) -->
+    <div id="preloader" style="position: fixed; inset: 0; z-index: 9999; background-color: #fcfcfc; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+        <img src="/logo-dark.png" style="height: 5rem;" alt="SP2M Logo" />
+        <div style="width: 10rem; height: 3px; background-color: rgba(22, 36, 60, 0.1); border-radius: 9999px; overflow: hidden; position: relative;">
+          <div style="position: absolute; top: 0; bottom: 0; width: 50%; background-color: #da9e3f; border-radius: 9999px; animation: preloader-bar 1.5s ease-in-out infinite;"></div>
+        </div>
+      </div>
+    </div>
+    
+    <style>
+      @keyframes preloader-bar {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+      }
+      .preloader-fade-out {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: scale(1.02);
+      }
+    </style>
+    
+    <script>
+      (function() {
+        function removePreloader() {
+          var preloader = document.getElementById('preloader');
+          if (preloader) {
+            preloader.classList.add('preloader-fade-out');
+            setTimeout(function() {
+              if (preloader && preloader.parentNode) {
+                preloader.parentNode.removeChild(preloader);
+              }
+            }, 600);
+          }
+        }
+        if (document.readyState === 'complete') {
+          removePreloader();
+        } else {
+          window.addEventListener('load', removePreloader);
+          // Fallback de segurança em 1.5s
+          setTimeout(removePreloader, 1500);
+        }
+      })();
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/spa-entry.tsx"></script>
   </body>

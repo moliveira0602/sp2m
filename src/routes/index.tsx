@@ -713,45 +713,8 @@ const itemVariants = {
 function Home() {
   useReveal();
 
-  const [isPreloading, setIsPreloading] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    const handleLoad = () => {
-      setFadeOut(true);
-      setTimeout(() => setIsPreloading(false), 600);
-    };
-
-    if (document.readyState === "complete") {
-      handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad);
-      const timeoutId = setTimeout(handleLoad, 1800);
-      return () => {
-        window.removeEventListener("load", handleLoad);
-        clearTimeout(timeoutId);
-      };
-    }
-  }, []);
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Preloader */}
-      {isPreloading && (
-        <div
-          className={`fixed inset-0 z-[9999] bg-[#fcfcfc] flex flex-col items-center justify-center gap-6 transition-all duration-500 ease-in-out ${
-            fadeOut ? "opacity-0 pointer-events-none scale-[1.02]" : "opacity-100"
-          }`}
-        >
-          <div className="flex flex-col items-center gap-6">
-            <Logo variant="dark" className="h-20" />
-            
-            <div className="w-40 h-[3px] bg-navy-deep/10 rounded-full overflow-hidden relative">
-              <div className="absolute top-0 bottom-0 w-1/2 bg-gold rounded-full animate-preloader-bar" />
-            </div>
-          </div>
-        </div>
-      )}
 
       <script
         type="application/ld+json"
