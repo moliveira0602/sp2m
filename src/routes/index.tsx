@@ -267,16 +267,22 @@ function useReveal() {
 
 // ─── LOGO COMPONENT ──────────────────────────────────────────────────────────
 
-function Logo({ variant = "light" }: { variant?: "light" | "dark" }) {
+function Logo({
+  variant = "light",
+  className = "h-16",
+}: {
+  variant?: "light" | "dark";
+  className?: string;
+}) {
   // variant="light" → usa versão branca/gold (para fundos escuros: Navbar, Footer)
   // variant="dark"  → usa versão navy/gold  (para fundos claros)
   return (
     <img
       src={variant === "light" ? logoForDark : logoForLight}
       alt="SP2M Inteligência Empresarial"
-      width={140}
-      height={56}
-      className={`h-14 w-auto object-contain ${
+      width={160}
+      height={64}
+      className={`w-auto object-contain ${className} ${
         variant === "light"
           ? "mix-blend-mode-screen brightness-110"
           : ""
@@ -643,8 +649,61 @@ const itemVariants = {
 function Home() {
   useReveal();
 
+  const [isPreloading, setIsPreloading] = useState(true);
+
+  useEffect(() => {
+    const handleLoad = () => {
+      setTimeout(() => setIsPreloading(false), 800);
+    };
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      const timeoutId = setTimeout(handleLoad, 1800);
+      return () => {
+        window.removeEventListener("load", handleLoad);
+        clearTimeout(timeoutId);
+      };
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Preloader */}
+      <AnimatePresence>
+        {isPreloading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed inset-0 z-[9999] bg-[#fcfcfc] flex flex-col items-center justify-center gap-6"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="flex flex-col items-center gap-6"
+            >
+              <Logo variant="dark" className="h-20" />
+              
+              <div className="w-40 h-[3px] bg-navy-deep/10 rounded-full overflow-hidden relative">
+                <motion.div
+                  initial={{ left: "-100%" }}
+                  animate={{ left: "100%" }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 1.5,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute top-0 bottom-0 w-1/2 bg-gold rounded-full"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
