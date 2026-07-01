@@ -52,8 +52,8 @@
 # Security Headers
 # ----------------------------------------------------------------------
 <IfModule mod_headers.c>
-  # Avoid clickjacking attacks by blocking iframe embedding (unless same origin)
-  Header set X-Frame-Options "SAMEORIGIN"
+  # Avoid clickjacking attacks by blocking iframe embedding
+  Header set X-Frame-Options "DENY"
 
   # Block MIME type sniffing
   Header set X-Content-Type-Options "nosniff"
@@ -63,4 +63,10 @@
 
   # Control Referrer information sent with requests
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Content Security Policy (CSP)
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; form-action 'self' https://wa.me;"
+
+  # Permissions Policy
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 </IfModule>

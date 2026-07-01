@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sp2m.com.br/sitemap.xml
+Sitemap: https://sp2mgestao.com.br/sitemap.xml

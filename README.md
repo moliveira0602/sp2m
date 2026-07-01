@@ -1,4 +1,4 @@
-# SP2M Inteligência Empresarial — Portal Corporativo & CFO Virtual
+# SP2M Inteligência Empresarial — Portal Corporativo & Diagnóstico Estratégico
 
 O canal digital de alta conversão e prestígio da **SP2M**, boutique de assessoria financeira estratégica e BPO financeiro voltada para PMEs de alta performance.
 
@@ -35,10 +35,10 @@ O portal é desenvolvido com ferramentas modernas para garantir taxa de carregam
 ```bash
 SP2M/
 ├── src/
-│   ├── assets/              # Logos, avatar do CFO Virtual e fotos naturais de testimonials
+│   ├── assets/              # Logos, avatar do especialista e fotos naturais de testimonials
 │   ├── components/
 │   │   └── ui/
-│   │       ├── chatbot.tsx  # CFO Virtual: Chat interativo de qualificação e handoff para WhatsApp
+│   │       ├── diagnostic-wizard.tsx # Diagnóstico: Questionário interativo de qualificação e handoff para WhatsApp
 │   │       └── yield-card.tsx # Cartão conceitual interativo (Glassmorphism / iOS style)
 │   ├── routes/
 │   │   └── index.tsx        # Página principal com a integração do GSAP ScrollTrigger e Framer Motion Hero
@@ -53,8 +53,8 @@ SP2M/
 
 ## ⚙️ Funcionalidades de Destaque
 
-1.  **CFO Virtual (Chatbot Qualificador):**
-    *   Assistente de bordo fotorrealista que guia o visitante por uma qualificação comercial B2B baseada na faixa de faturamento (plano enquadrado), setor e principal dor do negócio.
+1.  **Diagnóstico Interativo (Qualificador):**
+    *   Assistente de bordo que guia o visitante por uma qualificação comercial B2B baseada na faixa de faturamento (plano enquadrado), setor e principal dor do negócio.
     *   **Handoff de WhatsApp:** Envia um texto estruturado para a equipe de vendas contendo o pré-diagnóstico do lead já qualificado.
 2.  **Sistema de Revelação Progressiva (GSAP ScrollTrigger):**
     *   Efeito de materialização sutil de cards e seções com remoção progressiva de desfoque (`blur`) sob demanda do scroll do usuário, otimizado para não prejudicar repaints no browser.

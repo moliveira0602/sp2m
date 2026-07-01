@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, X, Send, ArrowRight, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import cfoAvatar from '@/assets/cfo-avatar.webp';
+import specialistAvatar from '@/assets/specialist-avatar.webp';
 
 interface Message {
-  sender: 'bot' | 'user';
+  sender: 'advisor' | 'user';
   text: string;
 }
 
-export function Chatbot() {
+export function DiagnosticWizard() {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<
     'intro' | 'name' | 'segment' | 'revenue' | 'challenge' | 'contact' | 'success'
@@ -34,7 +34,7 @@ export function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Open chatbot globally via custom event (e.g. from Hero CTA)
+  // Open diagnostic globally via custom event (e.g. from Hero CTA)
   useEffect(() => {
     const handleOpen = () => {
       setIsOpen(true);
@@ -42,15 +42,15 @@ export function Chatbot() {
         startChat();
       }
     };
-    window.addEventListener('open-chatbot', handleOpen);
-    return () => window.removeEventListener('open-chatbot', handleOpen);
+    window.addEventListener('open-diagnostic', handleOpen);
+    return () => window.removeEventListener('open-diagnostic', handleOpen);
   }, [messages]);
 
   const startChat = () => {
     setMessages([
-      { sender: 'bot', text: 'Olá! Seja muito bem-vindo à SP2M Inteligência Empresarial.' },
-      { sender: 'bot', text: 'Eu sou o seu CFO Virtual. Vou te ajudar a estruturar um diagnóstico financeiro rápido para a sua empresa.' },
-      { sender: 'bot', text: 'Para começarmos, qual o seu nome completo e seu cargo atual?' }
+      { sender: 'advisor', text: 'Olá! Seja muito bem-vindo à SP2M Inteligência Empresarial.' },
+      { sender: 'advisor', text: 'Este é o Assistente de Diagnóstico da SP2M. Vou te ajudar a estruturar um diagnóstico financeiro rápido para a sua empresa.' },
+      { sender: 'advisor', text: 'Para começarmos, qual o seu nome completo e seu cargo atual?' }
     ]);
     setStep('name');
   };
@@ -81,8 +81,8 @@ export function Chatbot() {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
-          { sender: 'bot', text: `Prazer em falar com você, ${nomeParsed}!` },
-          { sender: 'bot', text: 'Qual é o principal setor ou segmento de atuação da sua empresa?' }
+          { sender: 'advisor', text: `Prazer em falar com você, ${nomeParsed}!` },
+          { sender: 'advisor', text: 'Qual é o principal setor ou segmento de atuação da sua empresa?' }
         ]);
         setStep('segment');
       }, 800);
@@ -101,22 +101,22 @@ export function Chatbot() {
       if (field === 'segmento') {
         setMessages((prev) => [
           ...prev,
-          { sender: 'bot', text: 'Excelente. Para direcionarmos ao nível de relatórios gerenciais e assessoria ideal:' },
-          { sender: 'bot', text: 'Qual a faixa de faturamento mensal aproximada da sua empresa?' }
+          { sender: 'advisor', text: 'Excelente. Para direcionarmos ao nível de relatórios gerenciais e assessoria ideal:' },
+          { sender: 'advisor', text: 'Qual a faixa de faturamento mensal aproximada da sua empresa?' }
         ]);
         setStep('revenue');
       } else if (field === 'faturamento') {
         setMessages((prev) => [
           ...prev,
-          { sender: 'bot', text: 'Perfeito. E hoje, qual o maior desafio ou gargalo financeiro que impede sua empresa de crescer de forma organizada?' }
+          { sender: 'advisor', text: 'Perfeito. E hoje, qual o maior desafio ou gargalo financeiro que impede sua empresa de crescer de forma organizada?' }
         ]);
         setStep('challenge');
       } else if (field === 'desafio') {
         const tier = getSP2MTier(lead.faturamento);
         setMessages((prev) => [
           ...prev,
-          { sender: 'bot', text: `Agradeço pelas informações. Com base no seu faturamento e setor, a jornada ideal para o seu negócio é o ${tier}.` },
-          { sender: 'bot', text: 'Para que um CFO sênior elabore o seu diagnóstico prévio gratuito, por favor informe seus dados de contato:' }
+          { sender: 'advisor', text: `Agradeço pelas informações. Com base no seu faturamento e setor, a jornada ideal para o seu negócio é o ${tier}.` },
+          { sender: 'advisor', text: 'Para que um especialista sênior elabore o seu diagnóstico prévio gratuito, por favor informe seus dados de contato:' }
         ]);
         setStep('contact');
       }
@@ -142,8 +142,8 @@ export function Chatbot() {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: 'bot', text: 'Pronto! Seu diagnóstico foi qualificado e registrado com sucesso.' },
-        { sender: 'bot', text: 'Clique no botão abaixo para iniciar seu atendimento prioritário no WhatsApp com o consultor sênior responsável. Já compartilhamos suas respostas!' }
+        { sender: 'advisor', text: 'Pronto! Seu diagnóstico foi qualificado e registrado com sucesso.' },
+        { sender: 'advisor', text: 'Clique no botão abaixo para iniciar seu atendimento prioritário no WhatsApp com o consultor sênior responsável. Já compartilhamos suas respostas!' }
       ]);
       setStep('success');
     }, 800);
@@ -152,7 +152,7 @@ export function Chatbot() {
   const startWhatsAppHandoff = () => {
     const tier = getSP2MTier(lead.faturamento);
     const text = encodeURIComponent(
-      `Olá SP2M! Realizei o diagnóstico estratégico com o CFO Virtual.\n\n` +
+      `Olá SP2M! Realizei o diagnóstico estratégico no site.\n\n` +
       `👤 *Lead:* ${lead.nome} (${lead.cargo})\n` +
       `🏢 *Segmento:* ${lead.segmento}\n` +
       `💰 *Faturamento:* ${lead.faturamento} (${tier})\n` +
@@ -181,13 +181,15 @@ export function Chatbot() {
           <div className="bg-[#01040e] border-b border-white/5 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img
-                src={cfoAvatar}
-                alt="CFO Virtual Avatar"
+                src={specialistAvatar}
+                alt="Especialista SP2M"
+                width={36}
+                height={36}
                 className="h-9 w-9 rounded-full object-cover border border-gold/30 shadow-md"
               />
               <div>
-                <p className="text-xs text-white/40 uppercase tracking-wider font-semibold">Assistente Virtual</p>
-                <h4 className="text-sm font-display font-medium text-white">CFO Virtual SP2M</h4>
+                <p className="text-xs text-white/40 uppercase tracking-wider font-semibold">Diagnóstico Financeiro</p>
+                <h4 className="text-sm font-display font-medium text-white">Assistente SP2M</h4>
               </div>
             </div>
             <button 
@@ -340,13 +342,14 @@ export function Chatbot() {
               </button>
             )}
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Chat Trigger Button */}
       <button
         onClick={handleToggle}
+        aria-label="Abrir formulário de diagnóstico"
         className={`h-14 w-14 rounded-full overflow-hidden flex items-center justify-center text-gold cursor-pointer transition-all duration-300 border border-gold/30 hover:scale-105 active:scale-95 shadow-[0_8px_32px_rgba(218,158,63,0.25)] ${
           isOpen ? 'bg-[#01040e] rotate-90 border-white/10' : 'bg-[#030d1e] hover:shadow-[0_8px_32px_rgba(218,158,63,0.4)]'
         }`}
@@ -354,7 +357,7 @@ export function Chatbot() {
         {isOpen ? (
           <X className="h-6 w-6" />
         ) : (
-          <img src={cfoAvatar} alt="CFO Virtual" className="h-full w-full object-cover" />
+          <img src={specialistAvatar} alt="Diagnóstico" width={56} height={56} className="h-full w-full object-cover" />
         )}
       </button>
 

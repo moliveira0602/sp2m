@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { YieldCard } from "@/components/ui/yield-card";
-import { Chatbot } from "@/components/ui/chatbot";
+import { DiagnosticWizard } from "@/components/ui/diagnostic-wizard";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -17,6 +17,7 @@ import t3Img from "@/assets/testimonial-3.webp";
 import techBiImg from "@/assets/tech-bi.webp";
 import {
   ArrowRight,
+  ArrowUp,
   BarChart3,
   Building2,
   CheckCircle2,
@@ -26,6 +27,7 @@ import {
   Mail,
   MessageCircle,
   Instagram,
+  Phone,
   TrendingUp,
   Wallet,
   Eye,
@@ -64,7 +66,7 @@ export const Route = createFileRoute("/")({
           "Terceirização Financeira (BPO), Assessoria Estratégica e CFO sob Demanda. Transformando dados financeiros em decisões para impulsionar o crescimento de PMEs.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://sp2m.com.br/" },
+      { property: "og:url", content: "https://sp2mgestao.com.br/" },
       { name: "twitter:title", content: "SP2M Inteligência Empresarial — BPO Financeiro & CFO sob Demanda" },
       {
         name: "twitter:description",
@@ -272,6 +274,8 @@ function Logo({ variant = "light" }: { variant?: "light" | "dark" }) {
     <img
       src={variant === "light" ? logoForDark : logoForLight}
       alt="SP2M Inteligência Empresarial"
+      width={140}
+      height={56}
       className={`h-14 w-auto object-contain ${
         variant === "light"
           ? "mix-blend-mode-screen brightness-110"
@@ -309,85 +313,148 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "nav-scrolled" : ""
+      className="fixed top-0 inset-x-0 z-50 transition-all duration-500 flex flex-col"
+      style={scrolled ? { transform: "translateY(-36px)" } : {}}
+    >
+      {/* Topbar */}
+      <div className="bg-navy-950 text-white/70 border-b border-white/5 text-[10px] sm:text-xs py-2 px-4 h-9 flex items-center">
+        <div className="container-px max-w-7xl mx-auto w-full flex justify-between items-center gap-2">
+          <a
+            href="mailto:contato@sp2mgestao.com.br"
+            className="flex items-center gap-1.5 hover:text-gold transition-colors font-medium truncate"
+          >
+            <Mail className="h-3.5 w-3.5 text-gold/85 shrink-0" />
+            <span className="truncate">contato@sp2mgestao.com.br</span>
+          </a>
+          <a
+            href="https://wa.me/5581992781366"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 hover:text-gold transition-colors font-medium shrink-0"
+          >
+            <Phone className="h-3.5 w-3.5 text-gold/85 shrink-0" />
+            <span>(81) 99278-1366</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Main Nav Container */}
+      <div
+        className={`w-full transition-all duration-500 ${
+          scrolled ? "nav-scrolled" : "bg-transparent"
+        }`}
+      >
+        <nav className="container-px max-w-7xl mx-auto flex items-center justify-between h-20">
+          {/* Logotipo */}
+          <a href="#top" className="hover:opacity-80 transition-opacity duration-300">
+            <Logo variant="dark" />
+          </a>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-8 text-sm">
+            {navLinks.map(([href, label]) => (
+              <a key={href} href={href} className="nav-link">
+                {label}
+              </a>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
+          <a
+            href="#contato"
+            onClick={(e) => {
+              e.preventDefault();
+              window.dispatchEvent(new CustomEvent("open-diagnostic"));
+            }}
+            className="hidden md:inline-flex items-center gap-2 text-sm text-navy-deep bg-gold hover:bg-gold-soft transition-all duration-300 px-5 py-2.5 rounded-full font-semibold shadow-[var(--glow-gold-sm)] hover:shadow-[var(--glow-gold-md)] hover:-translate-y-px"
+          >
+            Diagnóstico gratuito <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+
+          {/* Mobile toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-navy-deep p-2 hover:text-gold transition-colors"
+            aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </nav>
+
+        {/* Mobile menu (Transição rápida e fluida com Framer Motion) */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden border-t border-border overflow-hidden"
+              style={{ background: "oklch(0.985 0.002 255 / 0.97)", backdropFilter: "blur(20px)" }}
+            >
+              <div className="container-px py-6 flex flex-col gap-5">
+                {navLinks.map(([href, label]) => (
+                  <a
+                    key={href}
+                    href={href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-navy-deep/80 hover:text-gold transition-colors text-sm font-medium"
+                  >
+                    {label}
+                  </a>
+                ))}
+                <a
+                  href="#contato"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpen(false);
+                    window.dispatchEvent(new CustomEvent("open-diagnostic"));
+                  }}
+                  className="inline-flex items-center gap-2 bg-gold text-navy-deep px-5 py-3 rounded-full font-semibold w-fit text-sm mt-2"
+                >
+                  Diagnóstico gratuito <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </header>
+  );
+}
+
+function ScrollToTop() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <button
+      onClick={scrollToTop}
+      aria-label="Voltar ao topo"
+      className={`fixed bottom-[88px] sm:bottom-24 right-4 sm:right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gold/30 bg-[#030d1e]/90 text-gold shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-gold hover:text-navy-deep hover:border-gold group ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
       }`}
     >
-      <nav className="container-px max-w-7xl mx-auto flex items-center justify-between h-20">
-        {/* Logotipo */}
-        <a href="#top" className="hover:opacity-80 transition-opacity duration-300">
-          <Logo variant="dark" />
-        </a>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8 text-sm">
-          {navLinks.map(([href, label]) => (
-            <a key={href} href={href} className="nav-link">
-              {label}
-            </a>
-          ))}
-        </div>
-
-        {/* Desktop CTA */}
-        <a
-          href="#contato"
-          onClick={(e) => {
-            e.preventDefault();
-            window.dispatchEvent(new CustomEvent("open-chatbot"));
-          }}
-          className="hidden md:inline-flex items-center gap-2 text-sm text-navy-deep bg-gold hover:bg-gold-soft transition-all duration-300 px-5 py-2.5 rounded-full font-semibold shadow-[var(--glow-gold-sm)] hover:shadow-[var(--glow-gold-md)] hover:-translate-y-px"
-        >
-          Diagnóstico gratuito <ArrowRight className="h-3.5 w-3.5" />
-        </a>
-
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-navy-deep p-2 hover:text-gold transition-colors"
-          aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </nav>
-
-      {/* Mobile menu (Transição rápida e fluida com Framer Motion) */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden border-t border-border overflow-hidden"
-            style={{ background: "oklch(0.985 0.002 255 / 0.97)", backdropFilter: "blur(20px)" }}
-          >
-            <div className="container-px py-6 flex flex-col gap-5">
-              {navLinks.map(([href, label]) => (
-                <a
-                  key={href}
-                  href={href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-navy-deep/80 hover:text-gold transition-colors text-sm font-medium"
-                >
-                  {label}
-                </a>
-              ))}
-              <a
-                href="#contato"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpen(false);
-                  window.dispatchEvent(new CustomEvent("open-chatbot"));
-                }}
-                className="inline-flex items-center gap-2 bg-gold text-navy-deep px-5 py-3 rounded-full font-semibold w-fit text-sm mt-2"
-              >
-                Diagnóstico gratuito <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+      <ArrowUp className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+    </button>
   );
 }
 
@@ -448,14 +515,15 @@ function ContactForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const msg = encodeURIComponent(
-      `Olá SP2M! Gostaria de agendar um diagnóstico gratuito.\n\n` +
+    const subject = encodeURIComponent("Solicitação de Diagnóstico Gratuito - SP2M");
+    const body = encodeURIComponent(
+      `Olá SP2M!\n\nGostaria de agendar um diagnóstico gratuito.\n\n` +
         `👤 Nome: ${form.nome}\n` +
         `🏢 Empresa: ${form.empresa}\n` +
         `💰 Faturamento: ${form.faturamento}\n` +
         `🎯 Desafio principal: ${form.desafio}`
     );
-    window.open(`https://wa.me/5581992781366?text=${msg}`, "_blank");
+    window.location.href = `mailto:contato@sp2mgestao.com.br?subject=${subject}&body=${body}`;
     setSent(true);
     setTimeout(() => setSent(false), 4000);
   };
@@ -531,7 +599,7 @@ function ContactForm() {
       >
         {sent ? (
           <>
-            <CheckCircle2 className="h-4 w-4" /> Abrindo WhatsApp…
+            <CheckCircle2 className="h-4 w-4" /> Abrindo E-mail…
           </>
         ) : (
           <>
@@ -584,8 +652,8 @@ function Home() {
             "@context": "https://schema.org",
             "@type": "FinancialService",
             "name": "SP2M Inteligência Empresarial",
-            "url": "https://sp2m.com.br",
-            "logo": "https://sp2m.com.br/assets/logo-dark.png",
+            "url": "https://sp2mgestao.com.br",
+            "logo": "https://sp2mgestao.com.br/assets/logo-dark.png",
             "description": "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI) em Recife, Caruaru e região.",
             "address": {
               "@type": "PostalAddress",
@@ -644,7 +712,7 @@ function Home() {
                   href="#contato"
                   onClick={(e) => {
                     e.preventDefault();
-                    window.dispatchEvent(new CustomEvent("open-chatbot"));
+                    window.dispatchEvent(new CustomEvent("open-diagnostic"));
                   }}
                   className="inline-flex items-center gap-2 bg-gold text-navy-deep hover:bg-gold-soft transition-all duration-300 px-7 py-4 rounded-full font-semibold text-sm shadow-[var(--glow-gold-sm)] hover:shadow-[var(--glow-gold-md)] hover:-translate-y-0.5"
                 >
@@ -966,6 +1034,8 @@ function Home() {
                 src={techBiImg}
                 alt="Painel de Inteligência de Negócios (BI) da SP2M"
                 loading="lazy"
+                width={600}
+                height={380}
                 className="w-full h-auto object-cover"
               />
               {/* Subtle overlay to match dark theme */}
@@ -1049,6 +1119,8 @@ function Home() {
                     src={t.img}
                     alt={t.name}
                     loading="lazy"
+                    width={48}
+                    height={48}
                     className="h-12 w-12 rounded-full object-cover border-2 border-gold/30"
                   />
                   <div>
@@ -1139,7 +1211,7 @@ function Home() {
                   </div>
                 </a>
                 <a
-                  href="mailto:contato@sp2m.com.br"
+                  href="mailto:contato@sp2mgestao.com.br"
                   className="flex items-center gap-3.5 text-white/85 hover:text-gold transition-colors group"
                 >
                   <div className="flex items-center justify-center h-10 w-10 rounded-xl border border-white/10 group-hover:border-gold/40 transition-colors">
@@ -1147,7 +1219,7 @@ function Home() {
                   </div>
                   <div>
                     <div className="text-xs uppercase tracking-wider text-white/60 mb-0.5">Email</div>
-                    <span className="text-sm">contato@sp2m.com.br</span>
+                    <span className="text-sm">contato@sp2mgestao.com.br</span>
                   </div>
                 </a>
                 <a
@@ -1226,10 +1298,10 @@ function Home() {
               </li>
               <li>
                 <a
-                  href="mailto:contato@sp2m.com.br"
+                  href="mailto:contato@sp2mgestao.com.br"
                   className="flex items-center gap-2.5 hover:text-gold transition-colors text-navy-deep/80"
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-navy-deep/40" /> contato@sp2m.com.br
+                  <Mail className="h-4 w-4 shrink-0 text-navy-deep/40" /> contato@sp2mgestao.com.br
                 </a>
               </li>
               <li>
@@ -1270,7 +1342,8 @@ function Home() {
           </div>
         </div>
       </footer>
-      <Chatbot />
+      <DiagnosticWizard />
+      <ScrollToTop />
     </div>
   );
 }
