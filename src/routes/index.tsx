@@ -1,22 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { YieldCard } from "@/components/ui/yield-card";
 import { DiagnosticWizard } from "@/components/ui/diagnostic-wizard";
 import { sendDiagnostic } from "@/lib/api/diagnostic";
-
-if (typeof window !== "undefined") {
-  try {
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.config({
-      ignoreMobileResize: true
-    });
-  } catch (e) {
-    console.warn("GSAP ScrollTrigger não pôde ser registrado:", e);
-  }
-}
 import logoForDark from "@/assets/logo-dark.png";
 import logoForLight from "@/assets/logo-light.png";
 import t1Img from "@/assets/testimonial-1.webp";
@@ -229,54 +216,7 @@ const testimonials = [
 
 // ─── HOOKS ───────────────────────────────────────────────────────────────────
 
-function useReveal() {
-  useEffect(() => {
-    try {
-      const els = gsap.utils.toArray(".reveal");
-      if (!els.length) return;
 
-      const ctx = gsap.context(() => {
-        els.forEach((el: any) => {
-          let delay = 0;
-          const delayClass = Array.from(el.classList).find((c: any) => c.startsWith('reveal-delay-')) as string | undefined;
-          if (delayClass) {
-            const match = delayClass.match(/\d+/);
-            if (match) {
-              delay = parseInt(match[0], 10) * 0.1;
-            }
-          }
-
-          gsap.fromTo(el, 
-            { opacity: 0, y: 30 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              delay: delay,
-              ease: "power2.out",
-              onComplete: () => {
-                el.classList.add("revealed");
-              },
-              scrollTrigger: {
-                trigger: el,
-                start: "top 88%",
-                toggleActions: "play none none none"
-              }
-            }
-          );
-        });
-      });
-
-      return () => ctx.revert();
-    } catch (e) {
-      console.warn("useReveal: GSAP animation error", e);
-      // Fallback: reveal all elements immediately
-      document.querySelectorAll(".reveal").forEach((el) => {
-        el.classList.add("revealed");
-      });
-    }
-  }, []);
-}
 
 // ─── COMPONENTS ──────────────────────────────────────────────────────────────
 
@@ -726,8 +666,6 @@ const itemVariants = {
 };
 
 function Home() {
-  // useReveal();
-
   return (
     <div className="min-h-screen bg-background">
 
