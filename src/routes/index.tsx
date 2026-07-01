@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { YieldCard } from "@/components/ui/yield-card";
 import { DiagnosticWizard } from "@/components/ui/diagnostic-wizard";
+import { sendDiagnostic } from "@/lib/api/diagnostic";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -516,23 +517,47 @@ function ContactForm() {
     empresa: "",
     faturamento: "",
     desafio: "",
+    email: "",
+    whatsapp: "",
   });
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent("Solicitação de Diagnóstico Gratuito - SP2M");
-    const body = encodeURIComponent(
-      `Olá SP2M!\n\nGostaria de agendar um diagnóstico gratuito.\n\n` +
-        `👤 Nome: ${form.nome}\n` +
-        `🏢 Empresa: ${form.empresa}\n` +
-        `💰 Faturamento: ${form.faturamento}\n` +
-        `🎯 Desafio principal: ${form.desafio}`
-    );
-    window.location.href = `mailto:contato@sp2mgestao.com.br?subject=${subject}&body=${body}`;
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    setStatus("sending");
+    try {
+      await sendDiagnostic({ data: form });
+      setStatus("success");
+      setForm({
+        nome: "",
+        empresa: "",
+        faturamento: "",
+        desafio: "",
+        email: "",
+        whatsapp: "",
+      });
+      // Return to idle state after 8 seconds
+      setTimeout(() => setStatus("idle"), 8000);
+    } catch (err) {
+      console.error("Erro ao enviar diagnóstico:", err);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
+    }
   };
+
+  if (status === "success") {
+    return (
+      <div className="text-center py-8 space-y-4">
+        <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-emerald-500/10 text-emerald-500 mb-2">
+          <CheckCircle2 className="h-8 w-8 animate-bounce" />
+        </div>
+        <h4 className="font-display text-xl text-white">Sua mensagem foi enviada!</h4>
+        <p className="text-sm text-white/70 max-w-sm mx-auto">
+          Em breve você receberá uma confirmação por e-mail e nossa equipe entrará em contato com novidades.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -564,6 +589,36 @@ function ContactForm() {
           />
         </div>
       </div>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs uppercase tracking-widest text-white/70 mb-2">
+            Seu melhor E-mail
+          </label>
+          <input
+            type="email"
+            required
+            placeholder="email@empresa.com"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="form-input"
+          />
+        </div>
+        <div>
+          <label className="block text-xs uppercase tracking-widest text-white/70 mb-2">
+            WhatsApp com DDD
+          </label>
+          <input
+            type="tel"
+            required
+            placeholder="Ex: (81) 99999-9999"
+            value={form.whatsapp}
+            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+            className="form-input"
+          />
+        </div>
+      </div>
+
       <div>
         <label className="block text-xs uppercase tracking-widest text-white/70 mb-2">
           Faturamento mensal aproximado
@@ -583,6 +638,7 @@ function ContactForm() {
           <option value="Acima de R$ 2M/mês">Acima de R$ 2 milhões/mês</option>
         </select>
       </div>
+
       <div>
         <label className="block text-xs uppercase tracking-widest text-white/70 mb-2">
           Maior desafio financeiro hoje
@@ -595,17 +651,26 @@ function ContactForm() {
           className="form-input"
         />
       </div>
+
+      {status === "error" && (
+        <p className="text-xs text-red-400 font-medium">
+          Ocorreu um erro ao processar seu envio. Por favor, tente novamente ou fale conosco no WhatsApp.
+        </p>
+      )}
+
       <button
         type="submit"
+        disabled={status === "sending"}
         className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-sm transition-all duration-300 ${
-          sent
-            ? "bg-green-500 text-white"
+          status === "sending"
+            ? "bg-gold/50 text-navy-deep cursor-not-allowed"
             : "bg-gold text-navy-deep hover:bg-gold-soft hover:shadow-[var(--glow-gold-md)] hover:-translate-y-px"
         }`}
       >
-        {sent ? (
+        {status === "sending" ? (
           <>
-            <CheckCircle2 className="h-4 w-4" /> Abrindo E-mail…
+            <span className="h-4 w-4 border-2 border-navy-deep border-t-transparent rounded-full animate-spin" />
+            Enviando…
           </>
         ) : (
           <>
