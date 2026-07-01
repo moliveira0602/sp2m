@@ -239,11 +239,10 @@ function useReveal() {
         }
 
         gsap.fromTo(el, 
-          { opacity: 0, y: 30, filter: "blur(4px)" },
+          { opacity: 0, y: 30 },
           {
             opacity: 1,
             y: 0,
-            filter: "blur(0px)",
             duration: 0.8,
             delay: delay,
             ease: "power2.out",

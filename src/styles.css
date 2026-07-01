@@ -133,17 +133,14 @@
   .reveal {
     opacity: 0;
     transform: translateY(16px);
-    filter: blur(4px);
     transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform, filter;
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
   }
 
   .reveal.revealed {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0px);
   }
 
   /* Micro-interações táteis nos botões e links (Emil press scale) */
