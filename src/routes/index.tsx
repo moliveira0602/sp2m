@@ -8,7 +8,14 @@ import { DiagnosticWizard } from "@/components/ui/diagnostic-wizard";
 import { sendDiagnostic } from "@/lib/api/diagnostic";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  try {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({
+      ignoreMobileResize: true
+    });
+  } catch (e) {
+    console.warn("GSAP ScrollTrigger não pôde ser registrado:", e);
+  }
 }
 import logoForDark from "@/assets/logo-dark.png";
 import logoForLight from "@/assets/logo-light.png";
@@ -224,42 +231,50 @@ const testimonials = [
 
 function useReveal() {
   useEffect(() => {
-    const els = gsap.utils.toArray(".reveal");
-    if (!els.length) return;
+    try {
+      const els = gsap.utils.toArray(".reveal");
+      if (!els.length) return;
 
-    const ctx = gsap.context(() => {
-      els.forEach((el: any) => {
-        let delay = 0;
-        const delayClass = Array.from(el.classList).find((c: any) => c.startsWith('reveal-delay-')) as string | undefined;
-        if (delayClass) {
-          const match = delayClass.match(/\d+/);
-          if (match) {
-            delay = parseInt(match[0], 10) * 0.1;
-          }
-        }
-
-        gsap.fromTo(el, 
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: delay,
-            ease: "power2.out",
-            onComplete: () => {
-              el.classList.add("revealed");
-            },
-            scrollTrigger: {
-              trigger: el,
-              start: "top 88%",
-              toggleActions: "play none none none"
+      const ctx = gsap.context(() => {
+        els.forEach((el: any) => {
+          let delay = 0;
+          const delayClass = Array.from(el.classList).find((c: any) => c.startsWith('reveal-delay-')) as string | undefined;
+          if (delayClass) {
+            const match = delayClass.match(/\d+/);
+            if (match) {
+              delay = parseInt(match[0], 10) * 0.1;
             }
           }
-        );
-      });
-    });
 
-    return () => ctx.revert();
+          gsap.fromTo(el, 
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              delay: delay,
+              ease: "power2.out",
+              onComplete: () => {
+                el.classList.add("revealed");
+              },
+              scrollTrigger: {
+                trigger: el,
+                start: "top 88%",
+                toggleActions: "play none none none"
+              }
+            }
+          );
+        });
+      });
+
+      return () => ctx.revert();
+    } catch (e) {
+      console.warn("useReveal: GSAP animation error", e);
+      // Fallback: reveal all elements immediately
+      document.querySelectorAll(".reveal").forEach((el) => {
+        el.classList.add("revealed");
+      });
+    }
   }, []);
 }
 
@@ -1320,7 +1335,7 @@ function Home() {
             </div>
 
             {/* Right: Form */}
-            <div className="reveal reveal-delay-2">
+            <div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-8 md:p-10">
                 <div className="mb-8">
                   <div className="text-xs uppercase tracking-[0.2em] text-gold mb-2">

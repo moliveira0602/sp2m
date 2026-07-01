@@ -14,8 +14,6 @@ export function DiagnosticWizard() {
     'intro' | 'name' | 'segment' | 'revenue' | 'challenge' | 'contact' | 'success'
   >('intro');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  
   // Lead data state
   const [lead, setLead] = useState({
     nome: '',

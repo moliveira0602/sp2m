@@ -129,11 +129,10 @@
     box-shadow: 0 4px 30px oklch(0.16 0.04 256 / 0.05);
   }
 
-  /* Scroll reveal — estado inicial (Materialização de Jakub com Blur e TranslateY) */
+  /* Scroll reveal — estado inicial */
   .reveal {
     opacity: 0;
     transform: translateY(16px);
-    will-change: opacity, transform;
   }
 
   .reveal.revealed {
