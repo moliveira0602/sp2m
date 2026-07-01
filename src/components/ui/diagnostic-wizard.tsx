@@ -62,13 +62,13 @@ export function DiagnosticWizard() {
     }
   };
 
-  const handleSendText = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!inputValue.trim()) return;
+  const handleSendText = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const userText = (formData.get("nameInput") as string) || "";
+    if (!userText.trim()) return;
 
-    const userText = inputValue;
     setMessages((prev) => [...prev, { sender: 'user', text: userText }]);
-    setInputValue('');
 
     if (step === 'name') {
       // Parse name and role (Simple split by comma or take whole text as name)
@@ -86,10 +86,6 @@ export function DiagnosticWizard() {
         ]);
         setStep('segment');
       }, 800);
-    } else if (step === 'contact') {
-      // If user typed contact info in manual text (normally handles via inputs form)
-      setLead((prev) => ({ ...prev, email: userText }));
-      setStep('success');
     }
   };
 
@@ -130,13 +126,19 @@ export function DiagnosticWizard() {
     return 'SP2M Executivo';
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!lead.email || !lead.whatsapp) return;
+    const formData = new FormData(e.currentTarget);
+    const email = (formData.get("email") as string) || "";
+    const whatsapp = (formData.get("whatsapp") as string) || "";
+
+    if (!email || !whatsapp) return;
+    
+    setLead((prev) => ({ ...prev, email, whatsapp }));
 
     setMessages((prev) => [
       ...prev,
-      { sender: 'user', text: `E-mail: ${lead.email} | WhatsApp: ${lead.whatsapp}` }
+      { sender: 'user', text: `E-mail: ${email} | WhatsApp: ${whatsapp}` }
     ]);
 
     setTimeout(() => {
@@ -229,11 +231,10 @@ export function DiagnosticWizard() {
               <form onSubmit={handleSendText} className="flex gap-2">
                 <input
                   type="text"
+                  name="nameInput"
                   required
                   spellCheck={false}
                   placeholder="Seu nome, cargo (Ex: André, CEO)"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
                   className="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
                   autoFocus
                 />
@@ -311,20 +312,18 @@ export function DiagnosticWizard() {
               <form onSubmit={handleContactSubmit} className="space-y-3">
                 <input
                   type="email"
+                  name="email"
                   required
                   spellCheck={false}
                   placeholder="Seu melhor E-mail"
-                  value={lead.email}
-                  onChange={(e) => setLead({ ...lead, email: e.target.value })}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
                 />
                 <input
                   type="tel"
+                  name="whatsapp"
                   required
                   spellCheck={false}
                   placeholder="WhatsApp com DDD"
-                  value={lead.whatsapp}
-                  onChange={(e) => setLead({ ...lead, whatsapp: e.target.value })}
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
                 />
                 <button
