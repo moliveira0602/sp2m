@@ -230,6 +230,7 @@ export function DiagnosticWizard() {
                 <input
                   type="text"
                   required
+                  spellCheck={false}
                   placeholder="Seu nome, cargo (Ex: André, CEO)"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
@@ -311,6 +312,7 @@ export function DiagnosticWizard() {
                 <input
                   type="email"
                   required
+                  spellCheck={false}
                   placeholder="Seu melhor E-mail"
                   value={lead.email}
                   onChange={(e) => setLead({ ...lead, email: e.target.value })}
@@ -319,6 +321,7 @@ export function DiagnosticWizard() {
                 <input
                   type="tel"
                   required
+                  spellCheck={false}
                   placeholder="WhatsApp com DDD"
                   value={lead.whatsapp}
                   onChange={(e) => setLead({ ...lead, whatsapp: e.target.value })}

@@ -565,6 +565,8 @@ function ContactForm() {
             type="text"
             name="nome"
             required
+            autoComplete="name"
+            spellCheck={false}
             placeholder="Nome completo"
             className="form-input"
           />
@@ -577,6 +579,8 @@ function ContactForm() {
             type="text"
             name="empresa"
             required
+            autoComplete="organization"
+            spellCheck={false}
             placeholder="Nome da empresa"
             className="form-input"
           />
@@ -592,6 +596,8 @@ function ContactForm() {
             type="email"
             name="email"
             required
+            autoComplete="email"
+            spellCheck={false}
             placeholder="email@empresa.com"
             className="form-input"
           />
@@ -604,6 +610,8 @@ function ContactForm() {
             type="tel"
             name="whatsapp"
             required
+            autoComplete="tel"
+            spellCheck={false}
             placeholder="Ex: (81) 99999-9999"
             className="form-input"
           />
@@ -637,6 +645,8 @@ function ContactForm() {
         <input
           type="text"
           name="desafio"
+          autoComplete="off"
+          spellCheck={false}
           placeholder="Ex: fluxo de caixa, falta de dados, crescimento desorganizado..."
           className="form-input"
         />
