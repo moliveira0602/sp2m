@@ -520,6 +520,9 @@ function ContactForm() {
             name="nome"
             required
             autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            data-bitwarden-ignore
             spellCheck={false}
             placeholder="Nome completo"
             className="form-input"
@@ -534,6 +537,9 @@ function ContactForm() {
             name="empresa"
             required
             autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            data-bitwarden-ignore
             spellCheck={false}
             placeholder="Nome da empresa"
             className="form-input"
@@ -551,6 +557,9 @@ function ContactForm() {
             name="email"
             required
             autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            data-bitwarden-ignore
             spellCheck={false}
             placeholder="email@empresa.com"
             className="form-input"
@@ -565,6 +574,9 @@ function ContactForm() {
             name="whatsapp"
             required
             autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            data-bitwarden-ignore
             spellCheck={false}
             placeholder="Ex: (81) 99999-9999"
             className="form-input"

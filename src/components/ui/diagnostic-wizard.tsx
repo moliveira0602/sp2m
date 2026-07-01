@@ -232,6 +232,9 @@ export function DiagnosticWizard() {
                   name="nameInput"
                   required
                   autoComplete="off"
+                  data-1p-ignore
+                  data-lpignore="true"
+                  data-bitwarden-ignore
                   spellCheck={false}
                   placeholder="Seu nome, cargo (Ex: André, CEO)"
                   className="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
@@ -314,6 +317,9 @@ export function DiagnosticWizard() {
                   name="email"
                   required
                   autoComplete="off"
+                  data-1p-ignore
+                  data-lpignore="true"
+                  data-bitwarden-ignore
                   spellCheck={false}
                   placeholder="Seu melhor E-mail"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
@@ -323,6 +329,9 @@ export function DiagnosticWizard() {
                   name="whatsapp"
                   required
                   autoComplete="off"
+                  data-1p-ignore
+                  data-lpignore="true"
+                  data-bitwarden-ignore
                   spellCheck={false}
                   placeholder="WhatsApp com DDD"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-gold/50 focus:bg-white/[0.06]"
