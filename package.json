@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "build:static": "vite build --config vite.spa.config.ts && cp public/.htaccess dist/.htaccess",
+    "build:static": "tsx scripts/generate-diagnostic-data.ts && vite build --config vite.spa.config.ts && cp public/.htaccess dist/.htaccess",
     "preview": "vite preview",
     "preview:static": "vite preview --config vite.spa.config.ts",
     "lint": "eslint .",
@@ -87,6 +87,7 @@
     "globals": "^15.15.0",
     "nitro": "3.0.260603-beta",
     "prettier": "^3.7.3",
+    "tsx": "^4.23.12",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"

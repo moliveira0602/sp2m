@@ -7,6 +7,7 @@ node_modules/
 dist/
 build/
 .output/
+*.zip
 
 # Cache and temporary folders
 .tanstack/
@@ -25,6 +26,12 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+# PHP mail config with real SMTP credentials (see sendmail-config.example.php)
+/public/sendmail-config.php
+
+# Auto-generated from src/lib/diagnostic-questions.ts, see scripts/generate-diagnostic-data.ts
+/public/diagnostic-data.json
 
 # Logs
 npm-debug.log*
