@@ -750,9 +750,12 @@ function Home() {
             "@context": "https://schema.org",
             "@type": "FinancialService",
             "name": "SP2M Inteligência Empresarial",
+            "alternateName": "SP2M",
             "url": "https://sp2mgestao.com.br",
-            "logo": "https://sp2mgestao.com.br/assets/logo-dark.png",
+            "logo": "https://sp2mgestao.com.br/logo-dark.png",
+            "image": "https://sp2mgestao.com.br/og-image.jpg",
             "description": "BPO Financeiro, Assessoria Estratégica, Diretoria Financeira (CFO) sob Demanda e Inteligência de Negócios (BI) em Recife, Caruaru e região.",
+            "slogan": "Transformando números em decisões.",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Recife",
@@ -762,10 +765,12 @@ function Home() {
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+55-81-99278-1366",
+              "email": "contato@sp2mgestao.com.br",
               "contactType": "sales",
               "areaServed": ["BR", "PE", "Recife", "Caruaru"],
               "availableLanguage": "Portuguese"
-            }
+            },
+            "sameAs": ["https://instagram.com/sp2minteligenciaempresarial"]
           })
         }}
       />
