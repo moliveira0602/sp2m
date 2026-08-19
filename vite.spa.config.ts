@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      "@/lib/api/diagnostic-full": "/src/lib/api/diagnostic-full.client.ts",
       "@/lib/api/diagnostic": "/src/lib/api/diagnostic.client.ts",
       "@": "/src",
     },

@@ -65,7 +65,7 @@
   Header set Referrer-Policy "strict-origin-when-cross-origin"
 
   # Content Security Policy (CSP)
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'; form-action 'self' https://wa.me mailto:;"
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.gstatic.com https://brasilapi.com.br; frame-ancestors 'none'; form-action 'self' https://wa.me mailto:;"
 
   # Permissions Policy
   Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
