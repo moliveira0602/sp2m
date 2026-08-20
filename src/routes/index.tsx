@@ -3,8 +3,9 @@ import { useState, useEffect, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { YieldCard } from "@/components/ui/yield-card";
+import { CashForecastDashboard } from "@/components/ui/cash-forecast-dashboard";
 import { DiagnosticWizard } from "@/components/ui/diagnostic-wizard";
+import { ChatAssistant } from "@/components/ui/chat-assistant";
 import { sendDiagnostic } from "@/lib/api/diagnostic";
 
 if (typeof window !== "undefined") {
@@ -19,6 +20,7 @@ if (typeof window !== "undefined") {
 }
 import logoForDark from "@/assets/logo-dark.png";
 import logoForLight from "@/assets/logo-light.png";
+import ctaCity from "@/assets/hero-city.webp";
 import t1Img from "@/assets/testimonial-1.webp";
 import t2Img from "@/assets/testimonial-2.webp";
 import t3Img from "@/assets/testimonial-3.webp";
@@ -240,16 +242,16 @@ function useReveal() {
           if (delayClass) {
             const match = delayClass.match(/\d+/);
             if (match) {
-              delay = parseInt(match[0], 10) * 0.1;
+              delay = parseInt(match[0], 10) * 0.05;
             }
           }
 
-          gsap.fromTo(el, 
-            { opacity: 0, y: 30 },
+          gsap.fromTo(el,
+            { opacity: 0, y: 16 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.8,
+              duration: 0.4,
               delay: delay,
               ease: "power2.out",
               onComplete: () => {
@@ -257,7 +259,7 @@ function useReveal() {
               },
               scrollTrigger: {
                 trigger: el,
-                start: "top 88%",
+                start: "top 95%",
                 toggleActions: "play none none none"
               }
             }
@@ -784,7 +786,7 @@ function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_40%,oklch(0.74_0.13_75/0.07),transparent_70%)]" />
         <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
 
-        <div className="relative container-px max-w-7xl mx-auto w-full pt-32 pb-24 md:pt-40 md:pb-32">
+        <div className="relative container-px max-w-7xl mx-auto w-full pt-44 pb-24 md:pt-56 md:pb-32">
           <div className="grid lg:grid-cols-[1fr_auto] gap-16 xl:gap-24 items-center">
 
             {/* Text column (Framer Motion Staggered Entry) */}
@@ -847,12 +849,12 @@ function Home() {
               </motion.div>
             </motion.div>
 
-            {/* Dashboard visual (YieldCard) */}
-            <div className="hidden lg:block w-[360px] xl:w-[400px] animate-fade-in animate-delay-600">
+            {/* Dashboard visual (CashForecastDashboard) */}
+            <div className="w-full max-w-[400px] mx-auto lg:mx-0 lg:w-[360px] xl:w-[400px] animate-fade-in animate-delay-600">
               <div className="relative">
                 {/* Glow */}
                 <div className="absolute -inset-6 bg-gradient-to-tr from-gold/10 via-gold/5 to-transparent rounded-3xl blur-3xl" />
-                <YieldCard />
+                <CashForecastDashboard />
               </div>
             </div>
           </div>
@@ -1278,7 +1280,13 @@ function Home() {
         id="contato"
         className="relative bg-navy-950 text-white py-32 md:py-44 overflow-hidden"
       >
-        <div className="absolute inset-0 hero-grid opacity-20" />
+        <img
+          src={ctaCity}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/65 to-navy-950/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/20 to-navy-950/45" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,oklch(0.74_0.13_75/0.14),transparent_70%)]" />
         <div className="relative container-px max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-20 items-start">
@@ -1446,6 +1454,7 @@ function Home() {
         </div>
       </footer>
       <DiagnosticWizard />
+      <ChatAssistant />
       <ScrollToTop />
     </div>
   );

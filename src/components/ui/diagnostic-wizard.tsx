@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
   ChevronDown,
-  Gauge,
   Loader2,
   Search,
 } from "lucide-react";
@@ -79,12 +78,30 @@ export function DiagnosticWizard() {
     overallScore: number;
     protocol: string;
   } | null>(null);
+  const [closeCountdown, setCloseCountdown] = useState(15);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOpen = () => setOpen(true);
     window.addEventListener("open-diagnostic", handleOpen);
     return () => window.removeEventListener("open-diagnostic", handleOpen);
   }, []);
+
+  useEffect(() => {
+    if (step !== "success") return;
+    setCloseCountdown(15);
+    const interval = setInterval(() => {
+      setCloseCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          resetAndClose();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [step]);
 
   const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
   const overallProgress = Math.round((answeredCount / totalQuestions) * 100);
@@ -142,9 +159,14 @@ export function DiagnosticWizard() {
     setStep("assessment");
   }
 
+  function scrollBodyToTop() {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }
+
   function goToArea(index: number) {
     setAreaIndex(index);
     setMessage("");
+    scrollBodyToTop();
   }
 
   function goNext() {
@@ -156,15 +178,18 @@ export function DiagnosticWizard() {
     }
     setMessage("");
     setAreaIndex((i) => Math.min(i + 1, diagnosticAreas.length - 1));
+    scrollBodyToTop();
   }
 
   function goPrev() {
     setMessage("");
     if (areaIndex === 0) {
       setStep("profile");
+      scrollBodyToTop();
       return;
     }
     setAreaIndex((i) => i - 1);
+    scrollBodyToTop();
   }
 
   async function handleFinalSubmit() {
@@ -224,14 +249,6 @@ export function DiagnosticWizard() {
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        aria-label="Abrir diagnóstico financeiro"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 h-14 w-14 rounded-full bg-navy-deep border border-gold/30 text-gold flex items-center justify-center shadow-[0_8px_32px_rgba(218,158,63,0.25)] hover:shadow-[0_8px_32px_rgba(218,158,63,0.4)] hover:scale-105 active:scale-95 transition-all duration-300"
-      >
-        <Gauge className="h-6 w-6" />
-      </button>
-
       <Dialog
         open={open}
         onOpenChange={(next) => (next ? setOpen(true) : resetAndClose())}
@@ -269,7 +286,7 @@ export function DiagnosticWizard() {
             </div>
 
             {/* Body */}
-            <div className="flex-1 overflow-y-auto px-6 py-6">
+            <div ref={bodyRef} className="flex-1 overflow-y-auto px-6 py-6">
               {step === "profile" && (
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                   <p className="text-sm text-muted-foreground">
@@ -511,7 +528,7 @@ export function DiagnosticWizard() {
               {step === "assessment" && (
                 <div className="space-y-5">
                   {/* Area nav */}
-                  <div className="-mx-1 flex gap-1.5 overflow-x-auto pb-1">
+                  <div className="-mx-1 flex flex-wrap gap-1.5 pb-1">
                     {diagnosticAreas.map((a, i) => {
                       const done = a.questions.every(
                         (q) => answers[q.id] !== undefined,
@@ -641,6 +658,10 @@ export function DiagnosticWizard() {
                   >
                     Falar com a SP2M agora <ArrowRight className="h-4 w-4" />
                   </a>
+                  <p className="text-xs text-muted-foreground">
+                    Esta janela fechará automaticamente em {closeCountdown}{" "}
+                    segundo{closeCountdown === 1 ? "" : "s"}.
+                  </p>
                 </div>
               )}
             </div>

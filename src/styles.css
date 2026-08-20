@@ -93,6 +93,7 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
   body {
     background-color: var(--color-background);
@@ -101,6 +102,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "ss01", "cv11";
+    overflow-x: hidden;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
@@ -135,6 +137,13 @@
     transform: translateY(16px);
   }
 
+  /* GSAP animates opacity/transform via inline styles while revealing;
+     a CSS transition on those same properties (e.g. Tailwind's
+     transition-all) would re-ease every GSAP tick and read as a stutter. */
+  .reveal:not(.revealed) {
+    transition: none !important;
+  }
+
   .reveal.revealed {
     opacity: 1;
     transform: translateY(0);
@@ -161,12 +170,12 @@
   }
 
   /* Reveal com delays */
-  .reveal-delay-1 { transition-delay: 100ms; }
-  .reveal-delay-2 { transition-delay: 200ms; }
-  .reveal-delay-3 { transition-delay: 300ms; }
-  .reveal-delay-4 { transition-delay: 400ms; }
-  .reveal-delay-5 { transition-delay: 500ms; }
-  .reveal-delay-6 { transition-delay: 600ms; }
+  .reveal-delay-1 { transition-delay: 50ms; }
+  .reveal-delay-2 { transition-delay: 100ms; }
+  .reveal-delay-3 { transition-delay: 150ms; }
+  .reveal-delay-4 { transition-delay: 200ms; }
+  .reveal-delay-5 { transition-delay: 250ms; }
+  .reveal-delay-6 { transition-delay: 300ms; }
 
   /* Nav link com underline animado */
   .nav-link {
