@@ -2,6 +2,7 @@ import PDFDocument from "pdfkit";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { diagnosticAreas, scaleOptions } from "@/lib/diagnostic-questions";
+import type { DiagnosticResult, PlanPhase } from "@/lib/diagnostic-engine";
 import type { DiagnosticFullData } from "./send-diagnostic-full.server";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -11,6 +12,12 @@ const NAVY = "#16243c";
 const GOLD = "#da9e3f";
 const MUTED = "#6b7280";
 const BORDER = "#e5e7eb";
+
+const PHASE_LABEL: Record<PlanPhase, string> = {
+  AGORA: "Agora (0-30 dias)",
+  CURTO: "Curto prazo (31-90 dias)",
+  MEDIO: "Médio prazo (3-6 meses)",
+};
 
 function scoreLabel(value: number | "na" | undefined) {
   if (value === undefined) return "—";
@@ -23,14 +30,11 @@ export interface PdfReportData {
   profile: DiagnosticFullData["profile"];
   answers: DiagnosticFullData["answers"];
   protocol: string;
-  overallScore: number;
-  areaScores: { area: (typeof diagnosticAreas)[number]; score: number }[];
-  priorities: { area: (typeof diagnosticAreas)[number]; score: number }[];
+  result: DiagnosticResult;
 }
 
 export function generateDiagnosticPdf(data: PdfReportData): Promise<Buffer> {
-  const { profile, answers, protocol, overallScore, areaScores, priorities } =
-    data;
+  const { profile, answers, protocol, result } = data;
 
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({
@@ -87,10 +91,16 @@ export function generateDiagnosticPdf(data: PdfReportData): Promise<Buffer> {
       .fontSize(10)
       .fillColor(MUTED)
       .text("ÍNDICE DE MATURIDADE FINANCEIRA");
-    doc.font("Display").fontSize(36).fillColor(GOLD).text(`${overallScore}`, {
-      continued: true,
-    });
-    doc.font("Sans").fontSize(14).fillColor(MUTED).text(" / 100");
+    doc
+      .font("Display")
+      .fontSize(36)
+      .fillColor(GOLD)
+      .text(`${result.overallScore}`, { continued: true });
+    doc
+      .font("Sans")
+      .fontSize(14)
+      .fillColor(MUTED)
+      .text(` / 100 · ${result.classification}`);
     doc.moveDown(1);
 
     // ── Company profile table ───────────────────────────────
@@ -119,20 +129,79 @@ export function generateDiagnosticPdf(data: PdfReportData): Promise<Buffer> {
 
     // ── Area scores ──────────────────────────────────────────
     sectionTitle(doc, "Pontuação por área");
-    for (const { area, score } of areaScores) {
-      barRow(doc, `${area.number} · ${area.short}`, score, pageWidth);
+    for (const a of result.areaScores) {
+      barRow(doc, `${a.number} · ${a.short} (${a.classification})`, a.score, pageWidth);
     }
     doc.moveDown(0.5);
 
-    // ── Priorities ───────────────────────────────────────────
-    sectionTitle(doc, "Áreas prioritárias (menor maturidade)");
-    doc.font("Sans").fontSize(10).fillColor(NAVY);
-    priorities.forEach((p, i) => {
-      doc.text(`${i + 1}. ${p.area.short} — ${p.score}/100`);
-    });
-    doc.moveDown(1);
+    // ── Visão geral / achados / recomendações / plano ─────────
+    bulletSection(doc, "Visão geral", [result.executiveSummary], pageWidth);
+    bulletSection(
+      doc,
+      "Principais pontos fortes",
+      result.strengths.map((f) => f.text),
+      pageWidth,
+    );
+    bulletSection(
+      doc,
+      "Principais pontos de atenção",
+      result.attentionPoints.filter((f) => f.priority === "MEDIA").map((f) => f.text),
+      pageWidth,
+    );
+    bulletSection(
+      doc,
+      "Riscos identificados",
+      result.risks.map((f) => f.text),
+      pageWidth,
+    );
+    bulletSection(
+      doc,
+      "Oportunidades",
+      result.opportunities.map((f) => f.text),
+      pageWidth,
+    );
 
-    // ── Detailed answers ─────────────────────────────────────
+    if (result.recommendations.length) {
+      doc.addPage();
+      sectionTitle(doc, "Recomendações prioritárias");
+      for (const rec of result.recommendations) {
+        if (doc.y > doc.page.height - doc.page.margins.bottom - 40) doc.addPage();
+        doc.font("Sans-Bold").fontSize(9).fillColor(GOLD).text(`[${rec.priority}]`);
+        doc
+          .font("Sans")
+          .fontSize(9.5)
+          .fillColor(NAVY)
+          .text(rec.text, { width: pageWidth });
+        doc.moveDown(0.5);
+      }
+    }
+
+    doc.addPage();
+    sectionTitle(doc, "Plano de ação");
+    for (const phase of ["AGORA", "CURTO", "MEDIO"] as PlanPhase[]) {
+      const items = result.actionPlan[phase];
+      if (!items.length) continue;
+      if (doc.y > doc.page.height - doc.page.margins.bottom - 60) doc.addPage();
+      doc
+        .font("Sans-Bold")
+        .fontSize(10.5)
+        .fillColor(GOLD)
+        .text(PHASE_LABEL[phase], { paragraphGap: 3 });
+      for (const item of items) {
+        if (doc.y > doc.page.height - doc.page.margins.bottom - 30) doc.addPage();
+        doc
+          .font("Sans")
+          .fontSize(9.5)
+          .fillColor(NAVY)
+          .text(`- ${item.action}`, { width: pageWidth });
+        doc.moveDown(0.3);
+      }
+      doc.moveDown(0.5);
+    }
+
+    bulletSection(doc, "Conclusão executiva", [result.executiveConclusion], pageWidth);
+
+    // ── Detailed answers (appendix) ────────────────────────────
     doc.addPage();
     sectionTitle(doc, "Respostas detalhadas (80 questões)");
     for (const area of diagnosticAreas) {
@@ -178,6 +247,24 @@ function sectionTitle(doc: PDFKit.PDFDocument, title: string) {
   const y = doc.y;
   doc.font("Sans-Bold").fontSize(12).fillColor(NAVY).text(title, x, y);
   doc.x = x;
+  doc.moveDown(0.5);
+}
+
+function bulletSection(
+  doc: PDFKit.PDFDocument,
+  title: string,
+  items: string[],
+  width: number,
+) {
+  if (!items.length) return;
+  if (doc.y > doc.page.height - doc.page.margins.bottom - 60) doc.addPage();
+  sectionTitle(doc, title);
+  doc.font("Sans").fontSize(9.5).fillColor(NAVY);
+  for (const item of items) {
+    if (doc.y > doc.page.height - doc.page.margins.bottom - 30) doc.addPage();
+    doc.text(`- ${item}`, { width });
+    doc.moveDown(0.3);
+  }
   doc.moveDown(0.5);
 }
 
@@ -232,7 +319,7 @@ function barRow(
   }
   const left = doc.page.margins.left;
   const y = doc.y;
-  const labelWidth = width * 0.35;
+  const labelWidth = width * 0.45;
   const barWidth = width - labelWidth - 44;
   const barX = left + labelWidth;
 

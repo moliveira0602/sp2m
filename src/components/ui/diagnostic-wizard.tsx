@@ -77,6 +77,11 @@ export function DiagnosticWizard() {
   const [result, setResult] = useState<{
     overallScore: number;
     protocol: string;
+    classification: string;
+    areaScores: { areaId: string; short: string; number: string; score: number }[];
+    strengths: string[];
+    attentionAreas: string[];
+    message: string;
   } | null>(null);
   const [closeCountdown, setCloseCountdown] = useState(15);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -222,6 +227,12 @@ export function DiagnosticWizard() {
         overallScore:
           "overallScore" in response ? (response.overallScore ?? 0) : 0,
         protocol,
+        classification: "classification" in response ? (response.classification ?? "") : "",
+        areaScores: "areaScores" in response ? (response.areaScores ?? []) : [],
+        strengths: "strengths" in response ? (response.strengths ?? []) : [],
+        attentionAreas:
+          "attentionAreas" in response ? (response.attentionAreas ?? []) : [],
+        message: "message" in response ? (response.message ?? "") : "",
       });
       setStep("success");
     } catch (err) {
@@ -624,41 +635,90 @@ export function DiagnosticWizard() {
               )}
 
               {step === "success" && result && (
-                <div className="space-y-6 text-center py-4">
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
-                    <Check className="h-8 w-8" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                <div className="space-y-6 py-4">
+                  <div className="text-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+                      <Check className="h-8 w-8" />
+                    </div>
+                    <p className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">
                       Protocolo
                     </p>
                     <p className="font-display text-lg text-navy-deep">
                       {result.protocol}
                     </p>
                   </div>
+
                   <div className="mx-auto flex flex-col items-center">
                     <span className="font-display text-5xl text-gold">
                       {result.overallScore}
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      /100 — índice preliminar de maturidade
+                      /100{result.classification && ` — ${result.classification}`}
                     </span>
                   </div>
-                  <p className="mx-auto max-w-sm text-sm text-muted-foreground">
-                    Suas respostas e dados foram enviados à SP2M e uma
-                    confirmação já foi encaminhada para o seu e-mail. Nossa
-                    equipe entrará em contato em até 24 horas úteis com a
+
+                  {result.areaScores.length > 0 && (
+                    <div className="mx-auto grid max-w-md grid-cols-2 gap-x-6 gap-y-2 text-left">
+                      {result.areaScores.map((a) => (
+                        <div key={a.areaId} className="space-y-1">
+                          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                            <span>
+                              {a.number} · {a.short}
+                            </span>
+                            <span className="font-semibold text-navy-deep">
+                              {a.score}
+                            </span>
+                          </div>
+                          <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gold"
+                              style={{ width: `${a.score}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {(result.strengths.length > 0 || result.attentionAreas.length > 0) && (
+                    <div className="mx-auto flex max-w-md flex-wrap justify-center gap-2">
+                      {result.strengths.map((s) => (
+                        <span
+                          key={`strength-${s}`}
+                          className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700"
+                        >
+                          ✓ {s}
+                        </span>
+                      ))}
+                      {result.attentionAreas.map((a) => (
+                        <span
+                          key={`attention-${a}`}
+                          className="rounded-full bg-gold/15 px-3 py-1 text-xs font-medium text-gold-soft"
+                        >
+                          ● {a}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="mx-auto max-w-sm text-center text-sm text-muted-foreground">
+                    {result.message ||
+                      "Suas respostas e dados foram enviados à SP2M e uma confirmação já foi encaminhada para o seu e-mail."}{" "}
+                    Nossa equipe entrará em contato em até 24 horas úteis com a
                     análise executiva completa.
                   </p>
-                  <a
-                    href="https://wa.me/5581992781366"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-semibold text-navy-deep transition-all hover:bg-gold-soft hover:-translate-y-px"
-                  >
-                    Falar com a SP2M agora <ArrowRight className="h-4 w-4" />
-                  </a>
-                  <p className="text-xs text-muted-foreground">
+
+                  <div className="text-center">
+                    <a
+                      href="https://wa.me/5581992781366"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-semibold text-navy-deep transition-all hover:bg-gold-soft hover:-translate-y-px"
+                    >
+                      Falar com a SP2M agora <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                  <p className="text-center text-xs text-muted-foreground">
                     Esta janela fechará automaticamente em {closeCountdown}{" "}
                     segundo{closeCountdown === 1 ? "" : "s"}.
                   </p>

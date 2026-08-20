@@ -19,6 +19,13 @@ interface DiagnosticFullPayload {
   protocol: string;
 }
 
+interface ClientAreaScore {
+  areaId: string;
+  short: string;
+  number: string;
+  score: number;
+}
+
 export const sendDiagnosticFull = async ({
   data,
 }: {
@@ -38,5 +45,10 @@ export const sendDiagnosticFull = async ({
     success: true as const,
     overallScore: result.overallScore ?? 0,
     protocol: result.protocol ?? data.protocol,
+    classification: (result.classification ?? "") as string,
+    areaScores: (result.areaScores ?? []) as ClientAreaScore[],
+    strengths: (result.strengths ?? []) as string[],
+    attentionAreas: (result.attentionAreas ?? []) as string[],
+    message: (result.message ?? "") as string,
   };
 };

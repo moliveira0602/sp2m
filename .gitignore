@@ -30,8 +30,14 @@ Thumbs.db
 # PHP mail config with real SMTP credentials (see sendmail-config.example.php)
 /public/sendmail-config.php
 
-# Auto-generated from src/lib/diagnostic-questions.ts, see scripts/generate-diagnostic-data.ts
+# Auto-generated from src/lib/diagnostic-questions.ts / diagnostic-engine/rules.ts,
+# see scripts/generate-diagnostic-data.ts
 /public/diagnostic-data.json
+/public/diagnostic-rules.json
+
+# Stored diagnostics (client PII + answers + analysis) — never in git.
+/public/diagnostics-data/*.json
+/data/diagnostics/
 
 # Logs
 npm-debug.log*

@@ -13,5 +13,8 @@ define('SMTP_PASS', 'sua_senha_aqui');
 define('SMTP_FROM_EMAIL', 'noreply@sp2mgestao.com.br');
 define('SMTP_FROM_NAME', 'SP2M Gestão');
 
-// Para onde o relatório interno (diagnóstico completo / contato) é enviado
+// Para onde o lead do formulário de contato simples é enviado
 define('SP2M_TO_EMAIL', 'contato@sp2mgestao.com.br');
+
+// Para onde o diagnóstico completo (PDF com as 80 respostas do cliente) é enviado
+define('DIAGNOSTIC_TO_EMAIL', 'seidel@sp2mgestao.com.br');
